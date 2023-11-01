@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>排行榜</title>
+    <style>
+.table-container {
+    box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+    width: 70%;
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pass {
+    color: rgb(53, 158, 53);
+    font-weight: bold;
+}
+
+.fail {
+    color: red;
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table id="leaderboard">
+            <tr>
+                <th>Rank</th>
+                <th>姓名</th>
+                <th>学号</th>
+                <th>总得分</th>
+                <th>level0</th>
+                <th>level1</th>
+                <th>level2</th>
+                <th>level3</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+    /*
+    fetch('http://localhost:3000/Model')
+  .then(response => response.json())
+  .then(data => {
+    // 解析JSON数据并排序
+    const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
+
+    // 填充排行榜表格
+    const leaderboardTable = document.getElementById('leaderboard');
+    const firstDone = {}; // 记录每个题目的第一个完成者
+    sortedData.forEach((player, index) => {
+      const row = document.createElement('tr');
+      const rankCell = document.createElement('td');
+      rankCell.textContent = index + 1;
+      row.appendChild(rankCell);
+
+      const nameCell = document.createElement('td');
+      nameCell.textContent = player.name;
+      row.appendChild(nameCell);
+
+      const idCell = document.createElement('td');
+      idCell.textContent = player.id;
+      row.appendChild(idCell);
+
+      const totalScoreCell = document.createElement('td');
+      totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
+      row.appendChild(totalScoreCell);
+
+      player.score.forEach((level, levelIndex) => {
+        const levelScoreCell = document.createElement('td');
+        levelScoreCell.textContent = level.score;
+
+        if (level.score > 0) {
+          levelScoreCell.classList.add('pass');
+          if (!firstDone[levelIndex]) {
+            firstDone[levelIndex] = player.name;
+            levelScoreCell.style.backgroundColor = 'rgb(154, 209, 154)';
+          }
+        } else {
+          levelScoreCell.classList.add('fail');
+        }
+        row.appendChild(levelScoreCell);
+      });
+
+      leaderboardTable.appendChild(row);
+    });
+  })
+  .catch(error => {
+    console.log('Error:', error);
+  });
+*/
+fetch('http://localhost:3000/Model')
+  .then(response => response.json())
+  .then(data => {
+    // 填充排行榜表格
+    const leaderboardTable = document.getElementById('leaderboard');
+    const firstDone = {}; // 记录每个题目的第一个完成者
+
+    // 遍历数据，确定要涂色的背景
+    data.forEach(player => {
+      player.score.forEach((level, levelIndex) => {
+        if (level.score > 0 && !firstDone[levelIndex]) {
+          firstDone[levelIndex] = player.name;
+        }
+      });
+    });
+
+    // 解析JSON数据并排序
+    const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
+
+    sortedData.forEach((player, index) => {
+      const row = document.createElement('tr');
+      const rankCell = document.createElement('td');
+      rankCell.textContent = index + 1;
+      row.appendChild(rankCell);
+
+      const nameCell = document.createElement('td');
+      nameCell.textContent = player.name;
+      row.appendChild(nameCell);
+
+      const idCell = document.createElement('td');
+      idCell.textContent = player.id;
+      row.appendChild(idCell);
+
+      const totalScoreCell = document.createElement('td');
+      totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
+      row.appendChild(totalScoreCell);
+
+      player.score.forEach((level, levelIndex) => {
+        const levelScoreCell = document.createElement('td');
+        levelScoreCell.textContent = level.score;
+
+        if (level.score > 0) {
+          levelScoreCell.classList.add('pass');
+          if (firstDone[levelIndex] === player.name) {
+            levelScoreCell.style.backgroundColor = 'lightgreen';
+          }
+        } else {
+          levelScoreCell.classList.add('fail');
+        }
+        row.appendChild(levelScoreCell);
+      });
+
+      leaderboardTable.appendChild(row);
+    });
+  })
+  .catch(error => {
+    console.log('Error:', error);
+  });
+
+    </script>
+</body>
+</html>
