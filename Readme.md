@@ -240,4 +240,8 @@ git可视化工具：gitahead；
 git config --global --unset-all remote.origin.proxy
 ```
 
-### update：以上三条似乎并没有什么作用，好不好用全看运气，简直玄学...
+（4）
+不要忘记commit
+```
+git commit -m "xxx"
+```
