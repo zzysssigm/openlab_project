@@ -66,7 +66,29 @@ document.getElementById("SUBMIT").onclick = function(){
     }
     }
 */
+// 创建 Cookie
+function createCookie(name, value, days) {
+    var expires;
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    } else {
+      expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+   
+   // 清除指定名称的 Cookie
+  function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  }
 document.getElementById("SUBMIT").onclick = function() {
+
+    // 清除之前登录/注册所创建的 Cookie
+    deleteCookie("userName");
+    deleteCookie("masterCheck");
+
     var Password = document.getElementById("password").value;
     var confirmPassword = document.getElementById("confirmPassword").value;
     var Username = document.getElementById("Username").value;
@@ -104,9 +126,13 @@ document.getElementById("SUBMIT").onclick = function() {
   
           if (confirm('注册成功,是否立刻进入排行榜？')) {
             if (masterKey === "iloveopenlab") {  
+                createCookie("userName", Username, 1); // 创建 Cookie，过期时间为 1 天
+                createCookie("masterCheck", 1, 1); // 创建 Cookie，过期时间为 1 天
                 window.location.href = "rank_master.html"; // 跳转到管理员排行榜
             }
             else{
+                createCookie("userName", Username, 1); // 创建 Cookie，过期时间为 1 天
+                createCookie("masterCheck", 0, 1); // 创建 Cookie，过期时间为 1 天
                 window.location.href = "rank.html"; // 跳转到排行榜
             }
           } 

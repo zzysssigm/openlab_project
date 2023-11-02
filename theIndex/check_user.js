@@ -1,8 +1,29 @@
+// 创建 Cookie
+function createCookie(name, value, days) {
+  var expires;
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  } else {
+    expires = "";
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+ 
+ // 清除指定名称的 Cookie
+function deleteCookie(name) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
 
- document.getElementById("LOGIN").onclick = function(){
+document.getElementById("LOGIN").onclick = function(){
+    // 清除之前登录/注册所创建的 Cookie
+    deleteCookie("userName");
+    deleteCookie("masterCheck");
+
     var password = document.getElementById("password").value;
     var username = document.getElementById("Username").value;
-  
+
     var xhr = new XMLHttpRequest();
     var url = 'http://localhost:3000/User';
     xhr.open('GET', url, true);
@@ -17,7 +38,7 @@
           if (foundUser.password === password) {
             // 密码正确
             alert('密码正确，登录成功');
-            
+  
             var xhrMaster = new XMLHttpRequest();
             var urlMaster = 'http://localhost:3000/Master';
             xhrMaster.open('GET', urlMaster, true);
@@ -29,10 +50,14 @@
                 });
                 if(foundMaster){
                   alert('欢迎你，管理员');
-                  window.location.href = "rank_master.html"; //跳转到排行榜
+                  createCookie("userName", username, 1); // 创建 Cookie，过期时间为 1 天
+                  createCookie("masterCheck", 1, 1); // 创建 Cookie，过期时间为 1 天
+                  window.location.href = "rank_master.html"; //跳转到管理员排行榜
                 }
                 else{
-                  window.location.href = "rank.html"; //跳转到排行榜
+                  createCookie("userName", username, 1); // 创建 Cookie，过期时间为 1 天
+                  createCookie("masterCheck", 0, 1); // 创建 Cookie，过期时间为 1 天
+                  window.location.href = "rank.html"; //跳转到普通排行榜
                 }
               }
             };
@@ -65,10 +90,11 @@
           return model.id == username;//一个===折磨我一天
         });
         if (foundModel) {
-          // 用户名在Model中存在
-          // 可以不输入密码，直接登录
+          // 用户名在Model中存在，可以不输入密码，直接登录
           alert('用户名在Model中存在,免密登录成功');
-          window.location.href = "rank.html"; //跳转到排行榜
+          createCookie("userName", username, 1); // 创建 Cookie，过期时间为 1 天
+          createCookie("masterCheck", 0, 1); // 创建 Cookie，过期时间为 1 天
+          window.location.href = "rank.html"; //跳转到普通排行榜
         }
         else{
           // 用户名在Model中不存在

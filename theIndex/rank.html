@@ -42,6 +42,41 @@ tr:nth-child(even) {
     color: red;
     font-weight: bold;
 }
+.sidebar-button {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  padding: 10px 10px;
+  background-color: #c0a7a7;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-button:hover {
+  background-color: #987e7e;
+  border:5px;
+}
+.status-bar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #f0f0f0;
+  padding: 12px 13px;
+  border-radius: 5px;
+  box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.status-text {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
 
     </style>
 </head>
@@ -60,118 +95,132 @@ tr:nth-child(even) {
             </tr>
         </table>
     </div>
-
+    <div class="status-bar">
+      <span id="status-text"></span>
+    </div>
+    
     <script>
-    /*
-    fetch('http://localhost:3000/Model')
-  .then(response => response.json())
-  .then(data => {
-    // 解析JSON数据并排序
-    const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
+      document.addEventListener("DOMContentLoaded", function() {
+  var userName = getCookie("userName");
+  var statusText = document.getElementById("status-text");
+  if (statusText && userName) {
+    statusText.textContent = "UserID:"+userName;
+  }
+});
 
-    // 填充排行榜表格
-    const leaderboardTable = document.getElementById('leaderboard');
-    const firstDone = {}; // 记录每个题目的第一个完成者
-    sortedData.forEach((player, index) => {
-      const row = document.createElement('tr');
-      const rankCell = document.createElement('td');
-      rankCell.textContent = index + 1;
-      row.appendChild(rankCell);
+function getCookie(name) {
+  var cookies = document.cookie.split("; ");
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i].split("=");
+    if (cookie[0] === name) {
+      return cookie[1];
+    }
+  }
+  return "";
+}
+    </script>
 
-      const nameCell = document.createElement('td');
-      nameCell.textContent = player.name;
-      row.appendChild(nameCell);
-
-      const idCell = document.createElement('td');
-      idCell.textContent = player.id;
-      row.appendChild(idCell);
-
-      const totalScoreCell = document.createElement('td');
-      totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
-      row.appendChild(totalScoreCell);
-
-      player.score.forEach((level, levelIndex) => {
-        const levelScoreCell = document.createElement('td');
-        levelScoreCell.textContent = level.score;
-
-        if (level.score > 0) {
-          levelScoreCell.classList.add('pass');
-          if (!firstDone[levelIndex]) {
-            firstDone[levelIndex] = player.name;
-            levelScoreCell.style.backgroundColor = 'rgb(154, 209, 154)';
-          }
-        } else {
-          levelScoreCell.classList.add('fail');
+    <button class="sidebar-button" id="DELET">退出登录</button>
+    <script>
+      document.getElementById("DELET").onclick = function(){
+        // 清除指定名称的 Cookie
+        function deleteCookie(name) {
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         }
-        row.appendChild(levelScoreCell);
-      });
-
-      leaderboardTable.appendChild(row);
-    });
-  })
-  .catch(error => {
-    console.log('Error:', error);
-  });
-*/
+        deleteCookie("userName");
+        deleteCookie("masterCheck");
+        alert('已退出登录');
+        window.location.href = "index.html"; // 跳转到登陆界面
+      }
+    </script>
+    <script>
 fetch('http://localhost:3000/Model')
   .then(response => response.json())
   .then(data => {
-    // 填充排行榜表格
-    const leaderboardTable = document.getElementById('leaderboard');
-    const firstDone = {}; // 记录每个题目的第一个完成者
+    // 查询名为 "userName" 的 Cookie
+    var userNameCookie = getCookie("userName");
+    if (userNameCookie) {
+      // Cookie 非空，继续执行
 
-    // 遍历数据，确定要涂色的背景
-    data.forEach(player => {
-      player.score.forEach((level, levelIndex) => {
-        if (level.score > 0 && !firstDone[levelIndex]) {
-          firstDone[levelIndex] = player.name;
-        }
-      });
-    });
+      // 填充排行榜表格
+      const leaderboardTable = document.getElementById('leaderboard');
+      const firstDone = {}; // 记录每个题目的第一个完成者
 
-    // 解析JSON数据并排序
-    const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
-
-    sortedData.forEach((player, index) => {
-      const row = document.createElement('tr');
-      const rankCell = document.createElement('td');
-      rankCell.textContent = index + 1;
-      row.appendChild(rankCell);
-
-      const nameCell = document.createElement('td');
-      nameCell.textContent = player.name;
-      row.appendChild(nameCell);
-
-      const idCell = document.createElement('td');
-      idCell.textContent = player.id;
-      row.appendChild(idCell);
-
-      const totalScoreCell = document.createElement('td');
-      totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
-      row.appendChild(totalScoreCell);
-
-      player.score.forEach((level, levelIndex) => {
-        const levelScoreCell = document.createElement('td');
-        levelScoreCell.textContent = level.score;
-
-        if (level.score > 0) {
-          levelScoreCell.classList.add('pass');
-          if (firstDone[levelIndex] === player.name) {
-            levelScoreCell.style.backgroundColor = 'lightgreen';
+      // 遍历数据，确定要涂色的背景
+      data.forEach(player => {
+        player.score.forEach((level, levelIndex) => {
+          if (level.score > 0 && !firstDone[levelIndex]) {
+            firstDone[levelIndex] = player.name;
           }
-        } else {
-          levelScoreCell.classList.add('fail');
-        }
-        row.appendChild(levelScoreCell);
+        });
       });
 
-      leaderboardTable.appendChild(row);
-    });
+      // 解析JSON数据并排序
+      const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
+
+      sortedData.forEach((player, index) => {
+        const row = document.createElement('tr');
+        const rankCell = document.createElement('td');
+        rankCell.textContent = index + 1;
+        row.appendChild(rankCell);
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = player.name;
+        row.appendChild(nameCell);
+
+        const idCell = document.createElement('td');
+        idCell.textContent = player.id;
+        row.appendChild(idCell);
+
+        const totalScoreCell = document.createElement('td');
+        totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
+        row.appendChild(totalScoreCell);
+
+        player.score.forEach((level, levelIndex) => {
+          const levelScoreCell = document.createElement('td');
+          levelScoreCell.textContent = level.score;
+
+          if (level.score > 0) {
+            levelScoreCell.classList.add('pass');
+            if (firstDone[levelIndex] === player.name) {
+              levelScoreCell.style.backgroundColor = 'lightgreen';
+            }
+          } else {
+            levelScoreCell.classList.add('fail');
+          }
+          row.appendChild(levelScoreCell);
+        });
+        // 如果找到与 "userName" 对应的用户，将该用户所在行添加灰色边框
+        if (player.id == userNameCookie) {
+          console.log(player.id);
+          row.style.border = '5px solid grey';
+        }
+
+        leaderboardTable.appendChild(row);
+
+      });
+    } else {
+      // Cookie 为空，不响应
+      alert('您没有权限查看排行榜,请先登录');
+      window.location.href = "index.html"; // 跳转到登陆界面
+    }
   })
   .catch(error => {
     console.log('Error:', error);
   });
 
+// 获取指定名称的 Cookie 的值
+function getCookie(name) {
+  var cookieName = name + "=";
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i].trim();
+    if (cookie.indexOf(cookieName) === 0) {
+      return cookie.substring(cookieName.length, cookie.length);
+    }
+  }
+  return null;
+}
     </script>
 </body>
 </html>
