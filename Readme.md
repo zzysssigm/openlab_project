@@ -118,4 +118,48 @@ const Master = mongoose.model('Master', {
 
 
 
-## 写在最后
+## · 写在最后
+
+git指令备忘录：
+
+初始化：
+
+```
+git init
+git add .
+git commit -m 'init' 
+```
+
+推送到个人仓库（Gitee/Github）：
+
+```
+git remote add origin https://...
+```
+
+推送分支到仓库：
+
+```
+git branch -M main
+git push -u origin main
+```
+
+更新代码后，查看代码状态：
+
+```
+git status
+```
+
+暂存并提交所有修改：
+
+```
+git add .
+git commit -m "Update code"
+```
+
+推送到远程仓库：
+
+```
+git push
+```
+
+git可视化工具：gitahead；
