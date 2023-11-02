@@ -71,13 +71,29 @@ document.getElementById("SUBMIT").onclick = function() {
     var confirmPassword = document.getElementById("confirmPassword").value;
     var Username = document.getElementById("Username").value;
     var masterKey = document.getElementById("MASTER").value;
-  
+
     if (Password !== confirmPassword) {
       alert("The passwords you entered do not match");
-      return false;
+      return;
     } 
     else {
-      var xhr = new XMLHttpRequest();
+      var xhrUnique = new XMLHttpRequest();
+      var urlUnique = 'http://localhost:3000/User';
+      xhrUnique.open('GET', urlUnique, true);
+      xhrUnique.onload = function(){
+        if (xhrUnique.status === 200) {
+        var users = JSON.parse(xhrUnique.responseText);
+        var foundUser = users.find(function(user) {
+          //console.log(user.username);
+          return user.username == Username;
+        });
+  
+        if (foundUser) {
+          alert('用户已存在！');
+          window.location.href = "index.html";
+        }
+        else{
+            var xhr = new XMLHttpRequest();
       var url = 'http://localhost:3000/register';
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -93,22 +109,32 @@ document.getElementById("SUBMIT").onclick = function() {
             else{
                 window.location.href = "rank.html"; // 跳转到排行榜
             }
-          } else {
-                window.location.href = "index.html"; // 跳转到排行榜
+          } 
+          else {
+                window.location.href = "index.html"; // 跳转到登陆界面
           }
-        } else {
+        } 
+        else {
           // 主用户注册失败
           alert('主用户注册失败'); 
         }
       };
-  
       var data = {
         username: Username,
         password: Password
       };
+      
       var jsonData = JSON.stringify(data);
       console.log(jsonData);
       xhr.send(jsonData);
+        }
+      } 
+      else {
+        // 请求失败
+        alert('请求失败');
+      }
+      };
+      xhrUnique.send();
 
       if (masterKey === "iloveopenlab") {
         var xhrMaster = new XMLHttpRequest();
@@ -129,7 +155,6 @@ document.getElementById("SUBMIT").onclick = function() {
         console.log(jsonData1);
         xhrMaster.send(jsonData1);
       }
-      
     }
 }
   

@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
-//const fs = require('fs');
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 
 const app = express();
-
-//解析请求体
-app.use(bodyParser.json());
 
 const server = app.listen(3000, () => {
     console.log('App 正在监听3000的端口');
@@ -44,7 +42,8 @@ const Master = mongoose.model('Master', {
     username: String
 });
 
-console.log(1)
+//解析请求体
+app.use(bodyParser.json());
 
 // 处理注册请求
   app.options('/register', (req, res) => {
@@ -53,8 +52,6 @@ console.log(1)
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.sendStatus(200);
   });
-
-  console.log(2);
   
   app.post('/register', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
@@ -110,7 +107,33 @@ app.post('/Master', (req, res) => {
     });
 });
 
-// 读取 JSON 数据
+app.options('/updateScore', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(200);
+});
+
+app.post('/updateScore', async function(req, res) {
+  var id = req.body.id;
+  var level = req.body.level;
+  var score = req.body.score;
+  try {
+    var doc = await Model.findOneAndUpdate(
+      { id: id, 'score.level': level },
+      { $set: { 'score.$.score': score } }
+    ).exec();
+    console.log(doc);
+    res.status(200).send('更新成功');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('更新失败');
+  }
+});
+
+
+
+// 先读取一次 JSON 数据，方便演示
 axios.get('https://puzzle.qieee.top/api/rank',{ responseType: 'json' })
 .then(response => {
     const jsonData = response.data;
@@ -148,7 +171,7 @@ function fetchData() {
       console.error('Failed to fetch JSON data', error);
     });
 }
-// 每3分钟执行一次 fetchData() 函数
+// 之后每3分钟执行一次 fetchData() 函数
 setInterval(fetchData, 3 * 60 * 1000);
 
 app.get('/Model',async function (req, res) {

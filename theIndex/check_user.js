@@ -17,7 +17,26 @@
           if (foundUser.password === password) {
             // 密码正确
             alert('密码正确，登录成功');
-            window.location.href = "rank.html"; //跳转到排行榜
+            
+            var xhrMaster = new XMLHttpRequest();
+            var urlMaster = 'http://localhost:3000/Master';
+            xhrMaster.open('GET', urlMaster, true);
+            xhrMaster.onload = function(){
+              if(xhrMaster.status === 200){
+                var masters = JSON.parse(xhrMaster.responseText);
+                var foundMaster = masters.find(function(master) {
+                  return master.username === username;
+                });
+                if(foundMaster){
+                  alert('欢迎你，管理员');
+                  window.location.href = "rank_master.html"; //跳转到排行榜
+                }
+                else{
+                  window.location.href = "rank.html"; //跳转到排行榜
+                }
+              }
+            };
+            xhrMaster.send();
           } 
           else {
             // 密码不正确
@@ -26,7 +45,7 @@
         }
         else{
           console.log("user");
-          //alert("用户不存在");
+          alert("用户是非User用户");
         } 
       } 
       else {
@@ -54,7 +73,7 @@
         else{
           // 用户名在Model中不存在
           console.log("model");
-          alert('用户不存在');
+          alert('User是非Model用户');
         }
       }
       else{
