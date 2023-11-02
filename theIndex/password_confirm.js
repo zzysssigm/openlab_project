@@ -98,7 +98,7 @@ document.getElementById("SUBMIT").onclick = function() {
           }
         } else {
           // 主用户注册失败
-          alert('主用户注册失败');
+          alert('主用户注册失败'); 
         }
       };
   
@@ -117,7 +117,7 @@ document.getElementById("SUBMIT").onclick = function() {
         xhrMaster.setRequestHeader('Content-Type', 'application/json');
         xhrMaster.onload = function() {
         if (xhrMaster.status === 200) {
-            console.log("管理员注册成功");
+            alert('管理员注册成功');
         } 
         else {
             // 管理员注册失败

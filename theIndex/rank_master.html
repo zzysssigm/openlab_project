@@ -4,7 +4,7 @@
     <title>排行榜</title>
     <style>
 .table-container {
-    box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0);
+    box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
     width: 70%;
     margin: 0 auto;
 }
@@ -66,12 +66,55 @@ tr:nth-child(even) {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: auto;
-  height: auto;
+  width: 300px;
+  height: 400px;
   background-color: #fff;
   border: 1px solid #ccc;
-  z-index: 9998;
-  box-shadow: 7px 7px 13px 10px rgba(0, 0, 0, 0);
+  z-index: 10000;
+  box-shadow: 7px 7px 13px 10px rgba(0, 0, 0, 0.1) !important;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"] {
+  width:80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 4px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 5px auto;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+button[type="button"] {
+  width:50%;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 19px;
+  cursor: pointer;
+  margin: 20px auto;
+}
+
+button[type="button"]:hover {
+  background-color: #115195;
+}
+label {
+    display: flex;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 19px;
+    padding-left: 20px;
 }
     </style>
 </head>
@@ -93,25 +136,23 @@ tr:nth-child(even) {
     <div id="popup-wrapper">
         <button id="popup-toggle">修改接口</button>
         <div id="popup-container">
-          <!-- 浮窗内容 -->
-          <table id="leaderboard">
-            <tr>
-                <th>Rank</th>
-                <th>姓名</th>
-                <th>学号</th>
-                <th>总得分</th>
-                <th>level0</th>
-                <th>level1</th>
-                <th>level2</th>
-                <th>level3</th>
-            </tr>
-        </table>
+          <form>
+            <label>ID</label>
+            <input type="text" id="changeID"/>
+            <label>Level</label>
+            <input type="text" id="changeLevel" />
+            <label>Score</label>
+            <input type="text" id="changeScore" />
+            <button type="button">CHANGE</button>
+            <script src="change.js"></script>
+          </form>
         </div>
       </div>
+
     <script>
         var popupWrapper = document.getElementById('popup-wrapper');
-var popupToggle = document.getElementById('popup-toggle');
-var popupContainer = document.getElementById('popup-container');
+        var popupToggle = document.getElementById('popup-toggle');
+        var popupContainer = document.getElementById('popup-container');
 
 // 监听小窗按钮的点击事件
 popupToggle.addEventListener('click', function() {
@@ -119,68 +160,20 @@ popupToggle.addEventListener('click', function() {
   popupToggle.style.display = 'none';
 });
 
-// 监听浮窗关闭的事件
-popupContainer.addEventListener('click', function() {
-  popupContainer.style.display = 'none';
-  popupToggle.style.display = 'block';
+// 监听浮窗外区域点击事件
+document.addEventListener('click', function(event) {
+  // 检查点击事件是否发生在浮窗外区域
+  if (!popupContainer.contains(event.target) && event.target !== popupToggle) {
+    popupContainer.style.display = 'none';
+    popupToggle.style.display = 'block';
+  }
 });
-
     </script>
+
     <script>
-    /*
     fetch('http://localhost:3000/Model')
-  .then(response => response.json())
-  .then(data => {
-    // 解析JSON数据并排序
-    const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
-
-    // 填充排行榜表格
-    const leaderboardTable = document.getElementById('leaderboard');
-    const firstDone = {}; // 记录每个题目的第一个完成者
-    sortedData.forEach((player, index) => {
-      const row = document.createElement('tr');
-      const rankCell = document.createElement('td');
-      rankCell.textContent = index + 1;
-      row.appendChild(rankCell);
-
-      const nameCell = document.createElement('td');
-      nameCell.textContent = player.name;
-      row.appendChild(nameCell);
-
-      const idCell = document.createElement('td');
-      idCell.textContent = player.id;
-      row.appendChild(idCell);
-
-      const totalScoreCell = document.createElement('td');
-      totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
-      row.appendChild(totalScoreCell);
-
-      player.score.forEach((level, levelIndex) => {
-        const levelScoreCell = document.createElement('td');
-        levelScoreCell.textContent = level.score;
-
-        if (level.score > 0) {
-          levelScoreCell.classList.add('pass');
-          if (!firstDone[levelIndex]) {
-            firstDone[levelIndex] = player.name;
-            levelScoreCell.style.backgroundColor = 'rgb(154, 209, 154)';
-          }
-        } else {
-          levelScoreCell.classList.add('fail');
-        }
-        row.appendChild(levelScoreCell);
-      });
-
-      leaderboardTable.appendChild(row);
-    });
-  })
-  .catch(error => {
-    console.log('Error:', error);
-  });
-*/
-fetch('http://localhost:3000/Model')
-  .then(response => response.json())
-  .then(data => {
+    .then(response => response.json())
+    .then(data => {
     // 填充排行榜表格
     const leaderboardTable = document.getElementById('leaderboard');
     const firstDone = {}; // 记录每个题目的第一个完成者
