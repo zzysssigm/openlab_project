@@ -16,7 +16,7 @@
         opacity: 0.8;
         /* filter: blur(1px); */
         width: 440px;
-        height: 530px;
+        height: 580px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -97,13 +97,15 @@
     <div class="box_outer">
         <div class="container">
             <form>
+                <label>Username</label>
+                <input type="text" id="thename" required/>
                 <label>UserID</label>
                 <input type="text" id="Username" pattern="[0-9]{10}" required/>
                 <label>Password</label>
                 <input type="password" id="password" required/>
                 <label>Confirm your Password</label>
                 <input type="password" id="confirmPassword" required/>
-                <label>Register As Master?</label>
+                <label>Register As Master?</label>·
                 <input type="password" id="MASTER" placeholder="Input the master-key:" />
                 <button type="button" id="SUBMIT">Finish Register!</button>
                 <script src="password_confirm.js"></script>

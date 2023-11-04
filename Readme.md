@@ -1,5 +1,17 @@
 # README:
 
+## 0.环境的搭建
+
+#### （1）mongodb的下载，安装与配置
+
+
+
+#### （2）node.js与npm的配置
+
+
+
+#### （3）
+
 ## 1.启动后端服务
 
 ```
@@ -20,7 +32,34 @@ node erase
 
 请在根目录中执行，注意erase文件的位置。
 
-## 3.数据库Model
+## 3.后端服务的实现
+
+#### （1）express框架
+
+```javascript
+const app = express();
+
+const server = app.listen(3000, () => {
+    console.log('App 正在监听3000的端口');
+});
+```
+
+#### （2）链接数据库
+
+这里使用了mongoose辅助链接后端的mongodb：
+
+```javascript
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/mydatabase', {
+}).then(() => {
+  console.log('MongoDB连接成功');
+}).catch((error) => {
+  console.error('MongoDB连接失败', error);
+});
+```
+
+#### （3）数据库model
 
 定义了User，Master，Model三个model，分别是注册用户、管理员和数据模型。
 
@@ -240,8 +279,7 @@ git可视化工具：gitahead；
 git config --global --unset-all remote.origin.proxy
 ```
 
-（4）
-不要忘记commit
+（4）不要忘记commit：
 ```
 git commit -m "xxx"
 ```

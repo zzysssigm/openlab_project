@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+</head>
+
+<body>
+    <div id="levelPieChart" style="width: 600px; height: 400px;"></div>
+    <div id="scoreBarChart" style="width: 600px; height: 400px;"></div>
+    <script>
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(`${name}=`)) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return '';
+        }
+
+        const userName = getCookie('userName');
+
+        if (userName) {
+            fetch('http://localhost:3000/Model')
+                .then(response => response.json())
+                .then(data => {
+                    // 数据处理和可视化
+                    processData(data);
+                })
+                .catch(error => console.error(error));
+            function processData(data) {
+                // 计算每个level的通过率
+                const levels = [0, 1, 2, 3];
+                const passCounts = [0, 0, 0, 0];
+                data.forEach(item => {
+                    item.score.forEach(scoreItem => {
+                        if (scoreItem.score >= 10) {
+                            passCounts[scoreItem.level]++;
+                        }
+                    });
+                });
+                const passRates = passCounts.map(count => count / data.length);
+
+                // 绘制饼状图
+                // 绘制饼状图
+                const levelPieChart = echarts.init(document.getElementById('levelPieChart'));
+                levelPieChart.setOption({
+                    title: {
+                        text: '各Level通过率',
+                        left: 'center'
+                    },
+                    series: [{
+                        name: '通过率',
+                        type: 'pie',
+                        radius: '50%',
+                        data: levels.map((level, index) => ({
+                            name: `Level${level}`,
+                            value: passRates[index]
+                        })),
+                        label: {
+                            formatter: '{b} ({d}%)' // 显示名称和百分比
+                        }
+                    }]
+                });
+
+
+                // 计算总分数的分布情况
+                const totalScores = data.map(item => item.score.reduce((sum, scoreItem) => sum + scoreItem.score, 0));
+                const scoreDistribution = {};
+                totalScores.forEach(score => {
+                    if (score in scoreDistribution) {
+                        scoreDistribution[score]++;
+                    } else {
+                        scoreDistribution[score] = 1;
+                    }
+                });
+                const scoreValues = Object.keys(scoreDistribution);
+                const scoreCounts = Object.values(scoreDistribution);
+                const scorePercentages = scoreCounts.map(count => count / data.length);
+
+                // 绘制柱状图
+                const scoreBarChart = echarts.init(document.getElementById('scoreBarChart'));
+                scoreBarChart.setOption({
+                    title: {
+                        text: '总分数分布',
+                        left: 'center'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: scoreValues
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: '占比',
+                        type: 'bar',
+                        data: scorePercentages
+                    }]
+                });
+            }
+        }
+        else {
+            alert('请先登录！');
+            window.location.href = "index.html";
+        }
+
+
+    </script>
+</body>
+
+</html>

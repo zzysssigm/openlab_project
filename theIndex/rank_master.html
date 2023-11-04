@@ -1,335 +1,372 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>排行榜</title>
-    <style>
-.table-container {
-    box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
-    width: 70%;
-    margin: 0 auto;
-}
+  <title>排行榜</title>
+  <style>
+    .table-container {
+      box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+      width: 70%;
+      margin: 0 auto;
+    }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-th, td {
-    padding: 8px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
+    th,
+    td {
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
 
-td {
-    background-color: #fff;
-}
+    td {
+      background-color: #fff;
+    }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
 
-.pass {
-    color: rgb(53, 158, 53);
-    font-weight: bold;
-}
+    .pass {
+      color: rgb(53, 158, 53);
+      font-weight: bold;
+    }
 
-.fail {
-    color: red;
-    font-weight: bold;
-}
-#popup-wrapper {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  z-index: 9999;
-}
+    .fail {
+      color: red;
+      font-weight: bold;
+    }
 
-#popup-toggle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px;
-  border-radius: 7px;
-  background-color: #bcb3b3;
-  border: none;
-  cursor: pointer;
-}
+    #popup-wrapper {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 9999;
+    }
 
-#popup-container {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 400px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  z-index: 10000;
-  box-shadow: 7px 7px 13px 10px rgba(0, 0, 0, 0.1) !important;
-}
-form {
-  display: flex;
-  flex-direction: column;
-}
+    #popup-toggle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px;
+      border-radius: 7px;
+      background-color: #bcb3b3;
+      border: none;
+      cursor: pointer;
+    }
 
-input[type="text"] {
-  width:80%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 4px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  margin: 5px auto;
-}
+    #popup-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 400px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      z-index: 10000;
+      box-shadow: 7px 7px 13px 10px rgba(0, 0, 0, 0.1) !important;
+    }
 
-input[type="text"]:focus {
-  outline: none;
-  border-color: #007bff;
-}
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
-button[type="button"] {
-  width:50%;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 19px;
-  cursor: pointer;
-  margin: 20px auto;
-}
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 4px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin: 5px auto;
+    }
 
-button[type="button"]:hover {
-  background-color: #115195;
-}
-label {
-    display: flex;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    font-weight: bold;
-    font-size: 19px;
-    padding-left: 20px;
-}
-.sidebar-button {
-  position: fixed;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  padding: 10px 10px;
-  background-color: #c0a7a7;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 20px;
-}
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+    }
 
-.sidebar-button:hover {
-  background-color: #987e7e;
-  border:5px;
-}
-.status-bar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background-color: #f0f0f0;
-  padding: 12px 13px;
-  border-radius: 5px;
-  box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
-  font-size: 15px;
-  font-weight: bold;
-}
+    button[type="button"] {
+      width: 50%;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 19px;
+      cursor: pointer;
+      margin: 20px auto;
+    }
 
-.status-text {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  color: #333;
-}
-    </style>
+    button[type="button"]:hover {
+      background-color: #115195;
+    }
+
+    label {
+      display: flex;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      font-weight: bold;
+      font-size: 19px;
+      padding-left: 20px;
+    }
+
+    .sidebar-button {
+      position: fixed;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      padding: 10px 10px;
+      background-color: #c0a7a7;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .sidebar-button:hover {
+      background-color: #987e7e;
+      border: 5px;
+    }
+
+    .sidebar-button2 {
+      position: fixed;
+      top: 60%;
+      right: 10px;
+      transform: translateY(-100%);
+      padding: 10px 10px;
+      background-color: #c0a7a7;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-button2:hover {
+      background-color: #987e7e;
+      border: 5px;
+    }
+
+    .status-bar {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: #f0f0f0;
+      padding: 12px 13px;
+      border-radius: 5px;
+      box-shadow: 10px 10px 20px 15px rgba(0, 0, 0, 0.1);
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .status-text {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="table-container">
-        <table id="leaderboard">
-            <tr>
-                <th>Rank</th>
-                <th>姓名</th>
-                <th>学号</th>
-                <th>总得分</th>
-                <th>level0</th>
-                <th>level1</th>
-                <th>level2</th>
-                <th>level3</th>
-            </tr>
-        </table>
+  <div class="table-container">
+    <table id="leaderboard">
+      <tr>
+        <th>Rank</th>
+        <th>姓名</th>
+        <th>学号</th>
+        <th>总得分</th>
+        <th>level0</th>
+        <th>level1</th>
+        <th>level2</th>
+        <th>level3</th>
+      </tr>
+    </table>
+  </div>
+  <div id="popup-wrapper">
+    <button id="popup-toggle">修改接口</button>
+    <div id="popup-container">
+      <form>
+        <label>ID</label>
+        <input type="text" id="changeID" />
+        <label>Level</label>
+        <input type="text" id="changeLevel" />
+        <label>Score</label>
+        <input type="text" id="changeScore" />
+        <button type="button" id="CHANGE">CHANGE</button>
+        <script src="change.js"></script>
+      </form>
     </div>
-    <div id="popup-wrapper">
-        <button id="popup-toggle">修改接口</button>
-        <div id="popup-container">
-          <form>
-            <label>ID</label>
-            <input type="text" id="changeID"/>
-            <label>Level</label>
-            <input type="text" id="changeLevel" />
-            <label>Score</label>
-            <input type="text" id="changeScore" />
-            <button type="button" id="CHANGE">CHANGE</button>
-            <script src="change.js"></script>
-          </form>
-        </div>
-      </div>
+  </div>
 
-      <div class="status-bar">
-        <span id="status-text"></span>
-      </div>
-      
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    var userName = getCookie("userName");
-    var statusText = document.getElementById("status-text");
-    if (statusText && userName) {
-      statusText.textContent = "UserID:"+userName;
+  <div class="status-bar">
+    <span id="status-text"></span>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var userName = getCookie("userName");
+      var statusText = document.getElementById("status-text");
+      if (statusText && userName) {
+        statusText.textContent = "UserID:" + userName;
+      }
+    });
+
+    function getCookie(name) {
+      var cookies = document.cookie.split("; ");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].split("=");
+        if (cookie[0] === name) {
+          return cookie[1];
+        }
+      }
+      return "";
     }
-  });
+  </script>
+
+  <button class="sidebar-button" id="DELET">退出登录</button>
+  <script>
+    document.getElementById("DELET").onclick = function () {
+      // 清除指定名称的 Cookie
+      function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      }
+      deleteCookie("userName");
+      deleteCookie("masterCheck");
+      alert('已退出登录');
+      window.location.href = "index.html"; // 跳转到登陆界面
+    }
+  </script>
   
-  function getCookie(name) {
-    var cookies = document.cookie.split("; ");
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i].split("=");
-      if (cookie[0] === name) {
-        return cookie[1];
+  <button class="sidebar-button2" id="SCORE">数据统计</button>
+  <script>
+     document.getElementById("SCORE").onclick = function (){
+      window.location.href = "score_distribution.html";
+     }
+  </script>
+
+  <script>
+    var popupWrapper = document.getElementById('popup-wrapper');
+    var popupToggle = document.getElementById('popup-toggle');
+    var popupContainer = document.getElementById('popup-container');
+
+    // 监听小窗按钮的点击事件
+    popupToggle.addEventListener('click', function () {
+      popupContainer.style.display = 'block';
+      popupToggle.style.display = 'none';
+    });
+
+    // 监听浮窗外区域点击事件
+    document.addEventListener('click', function (event) {
+      // 检查点击事件是否发生在浮窗外区域
+      if (!popupContainer.contains(event.target) && event.target !== popupToggle) {
+        popupContainer.style.display = 'none';
+        popupToggle.style.display = 'block';
       }
-    }
-    return "";
-  }
-      </script>
+    });
+  </script>
 
-      <button class="sidebar-button" id="DELET">退出登录</button>
-    <script>
-      document.getElementById("DELET").onclick = function(){
-        // 清除指定名称的 Cookie
-        function deleteCookie(name) {
-          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        }
-        deleteCookie("userName");
-        deleteCookie("masterCheck");
-        alert('已退出登录');
-        window.location.href = "index.html"; // 跳转到登陆界面
-      }
-    </script>
-
-    <script>
-        var popupWrapper = document.getElementById('popup-wrapper');
-        var popupToggle = document.getElementById('popup-toggle');
-        var popupContainer = document.getElementById('popup-container');
-
-// 监听小窗按钮的点击事件
-popupToggle.addEventListener('click', function() {
-  popupContainer.style.display = 'block';
-  popupToggle.style.display = 'none';
-});
-
-// 监听浮窗外区域点击事件
-document.addEventListener('click', function(event) {
-  // 检查点击事件是否发生在浮窗外区域
-  if (!popupContainer.contains(event.target) && event.target !== popupToggle) {
-    popupContainer.style.display = 'none';
-    popupToggle.style.display = 'block';
-  }
-});
-    </script>
-
-    <script>
+  <script>
     fetch('http://localhost:3000/Model')
-  .then(response => response.json())
-  .then(data => {
-    // 查询名为 "userName" 的 Cookie
-    var userNameCookie = getCookie("userName");
-    if (userNameCookie) {
-      // Cookie 非空，继续执行
+      .then(response => response.json())
+      .then(data => {
+        // 查询名为 "userName" 的 Cookie
+        var userNameCookie = getCookie("userName");
+        var userMasterCookie = getCookie("masterCheck");
+        if (userNameCookie&&userMasterCookie!=0) {
+          // Cookie 非空，继续执行
 
-      // 填充排行榜表格
-      const leaderboardTable = document.getElementById('leaderboard');
-      const firstDone = {}; // 记录每个题目的第一个完成者
+          // 填充排行榜表格
+          const leaderboardTable = document.getElementById('leaderboard');
+          const firstDone = {}; // 记录每个题目的第一个完成者
 
-      // 遍历数据，确定要涂色的背景
-      data.forEach(player => {
-        player.score.forEach((level, levelIndex) => {
-          if (level.score > 0 && !firstDone[levelIndex]) {
-            firstDone[levelIndex] = player.name;
-          }
-        });
-      });
+          // 遍历数据，确定要涂色的背景
+          data.forEach(player => {
+            player.score.forEach((level, levelIndex) => {
+              if (level.score > 0 && !firstDone[levelIndex]) {
+                firstDone[levelIndex] = player.name;
+              }
+            });
+          });
 
-      // 解析JSON数据并排序
-      const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
+          // 解析JSON数据并排序
+          const sortedData = data.sort((a, b) => b.score.reduce((sum, level) => sum + level.score, 0) - a.score.reduce((sum, level) => sum + level.score, 0));
 
-      sortedData.forEach((player, index) => {
-        const row = document.createElement('tr');
-        const rankCell = document.createElement('td');
-        rankCell.textContent = index + 1;
-        row.appendChild(rankCell);
+          sortedData.forEach((player, index) => {
+            const row = document.createElement('tr');
+            const rankCell = document.createElement('td');
+            rankCell.textContent = index + 1;
+            row.appendChild(rankCell);
 
-        const nameCell = document.createElement('td');
-        nameCell.textContent = player.name;
-        row.appendChild(nameCell);
+            const nameCell = document.createElement('td');
+            nameCell.textContent = player.name;
+            row.appendChild(nameCell);
 
-        const idCell = document.createElement('td');
-        idCell.textContent = player.id;
-        row.appendChild(idCell);
+            const idCell = document.createElement('td');
+            idCell.textContent = player.id;
+            row.appendChild(idCell);
 
-        const totalScoreCell = document.createElement('td');
-        totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
-        row.appendChild(totalScoreCell);
+            const totalScoreCell = document.createElement('td');
+            totalScoreCell.textContent = player.score.reduce((sum, level) => sum + level.score, 0);
+            row.appendChild(totalScoreCell);
 
-        player.score.forEach((level, levelIndex) => {
-          const levelScoreCell = document.createElement('td');
-          levelScoreCell.textContent = level.score;
+            player.score.forEach((level, levelIndex) => {
+              const levelScoreCell = document.createElement('td');
+              levelScoreCell.textContent = level.score;
 
-          if (level.score > 0) {
-            levelScoreCell.classList.add('pass');
-            if (firstDone[levelIndex] === player.name) {
-              levelScoreCell.style.backgroundColor = 'lightgreen';
+              if (level.score > 0) {
+                levelScoreCell.classList.add('pass');
+                if (firstDone[levelIndex] === player.name) {
+                  levelScoreCell.style.backgroundColor = 'lightgreen';
+                }
+              } else {
+                levelScoreCell.classList.add('fail');
+              }
+              row.appendChild(levelScoreCell);
+            });
+            // 如果找到与 "userName" 对应的用户，将该用户所在行添加灰色边框
+            if (player.id == userNameCookie) {
+              console.log(player.id);
+              row.style.border = '5px solid grey';
             }
-          } else {
-            levelScoreCell.classList.add('fail');
-          }
-          row.appendChild(levelScoreCell);
-        });
-        // 如果找到与 "userName" 对应的用户，将该用户所在行添加灰色边框
-        if (player.id == userNameCookie) {
-          console.log(player.id);
-          row.style.border = '5px solid grey';
+
+            leaderboardTable.appendChild(row);
+
+          });
+        } else {
+          // Cookie 为空，不响应
+          alert('您没有权限查看管理员排行榜');
+          window.location.href = "rank.html"; // 跳转到登陆界面
         }
-
-        leaderboardTable.appendChild(row);
-
+      })
+      .catch(error => {
+        console.log('Error:', error);
       });
-    } else {
-      // Cookie 为空，不响应
-      console.log('您没有权限查看排行榜');
-    }
-  })
-  .catch(error => {
-    console.log('Error:', error);
-  });
 
-// 获取指定名称的 Cookie 的值
-function getCookie(name) {
-  var cookieName = name + "=";
-  var cookies = document.cookie.split(';');
-  for (var i = 0; i < cookies.length; i++) {
-    var cookie = cookies[i].trim();
-    if (cookie.indexOf(cookieName) === 0) {
-      return cookie.substring(cookieName.length, cookie.length);
+    // 获取指定名称的 Cookie 的值
+    function getCookie(name) {
+      var cookieName = name + "=";
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.indexOf(cookieName) === 0) {
+          return cookie.substring(cookieName.length, cookie.length);
+        }
+      }
+      return null;
     }
-  }
-  return null;
-}
-    </script>
+  </script>
 </body>
+
 </html>

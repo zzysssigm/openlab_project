@@ -3,16 +3,14 @@ const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 
-
-
 const app = express();
 
 const server = app.listen(3000, () => {
-    console.log('App 正在监听3000的端口');
+  console.log('App 正在监听3000的端口');
 });
 
-app.get('/', function(req, res) {
-    res.sendFile('d:/servebase/genshin.jpg');//记得改成自己的绝对路径
+app.get('/', function (req, res) {
+  res.sendFile('d:/servebase/genshin.jpg');//记得改成自己的绝对路径
 });
 
 // 连接到 MongoDB 数据库
@@ -34,48 +32,72 @@ const Model = mongoose.model('Model', new mongoose.Schema({
 }));
 
 const User = mongoose.model('User', {
-    username: String,
-    password: String
-  });
+  username: String,
+  password: String
+});
 
 const Master = mongoose.model('Master', {
-    username: String
+  username: String
 });
 
 //解析请求体
 app.use(bodyParser.json());
 
 // 处理注册请求
-  app.options('/register', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.sendStatus(200);
+app.options('/register', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(200);
+});
+
+app.post('/register', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  const thename = req.body.thename;
+  const username =req.body.username;
+  const password =req.body.password;
+
+  // 创建新用户
+  const user = new User({ username, password });
+
+  // 保存用户到数据库
+  user.save()
+    .then(() => {
+      console.log("save user_data return:200 sucessfully");
+      res.sendStatus(200); // 注册成功，返回状态码 200
+    })
+    .catch((error) => {
+      console.error('Error saving user', error);
+      res.sendStatus(500); // 注册失败，返回状态码 500
+    });
+
+  // 转化成Model类型  
+  const newUser = new Model({
+    name: thename,
+    id: username,
+    score: [
+      { level: 0, score: 0 },
+      { level: 1, score: 0 },
+      { level: 2, score: 0 },
+      { level: 3, score: 0 }
+    ]
   });
-  
-  app.post('/register', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    const { username, password } = req.body;
+  // 保存到数据库
+  newUser.save()
+    .then(() => {
+      console.log("save User to model successfully");
+    })
+    .catch((error) => {
+      console.error('Error:cannot save user to model', error);
+    });
 
-    // 创建新用户
-    const user = new User({ username, password });
-  
-    // 保存用户到数据库
-    user.save()
-      .then(() => {
-        console.log("save user_data return:200 sucessfully");
-        res.sendStatus(200); // 注册成功，返回状态码 200
-      })
-      .catch((error) => {
-        console.error('Error saving user', error);
-        res.sendStatus(500); // 注册失败，返回状态码 500
-      });
-  });
+});
 
-  // 注册成为管理员
+// 注册成为管理员
 app.options('/Master', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
@@ -114,7 +136,7 @@ app.options('/updateScore', (req, res) => {
   res.sendStatus(200);
 });
 
-app.post('/updateScore', async function(req, res) {
+app.post('/updateScore', async function (req, res) {
   var id = req.body.id;
   var level = req.body.level;
   var score = req.body.score;
@@ -131,28 +153,25 @@ app.post('/updateScore', async function(req, res) {
   }
 });
 
-
-
 // 先读取一次 JSON 数据，方便演示
-axios.get('https://puzzle.qieee.top/api/rank',{ responseType: 'json' })
-.then(response => {
+axios.get('https://puzzle.qieee.top/api/rank', { responseType: 'json' })
+  .then(response => {
     const jsonData = response.data;
     //const data = JSON.parse(jsonData);
     // 插入数据
     Model.create(jsonData)
-    .then(result => {
+      .then(result => {
         console.log('数据已插入到数据库');
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         console.error(err);
-    });
+      });
     console.log(jsonData);
-})
-.catch(error => {
+  })
+  .catch(error => {
     console.error('Failed to fetch JSON data', error);
-});
+  });
 //const jsonData = fs.readFileSync('rank.json', 'utf8');
-
 
 function fetchData() {
   axios.get('https://puzzle.qieee.top/api/rank', { responseType: 'json' })
@@ -174,17 +193,17 @@ function fetchData() {
 // 之后每3分钟执行一次 fetchData() 函数
 setInterval(fetchData, 3 * 60 * 1000);
 
-app.get('/Model',async function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');//cors头
-    res.send(await Model.find());
+app.get('/Model', async function (req, res) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');//cors头
+  res.send(await Model.find());
 })
 
-app.get('/User',async function (req, res) {
+app.get('/User', async function (req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');//cors头
   res.send(await User.find());
 })
 
-app.get('/Master',async function (req, res) {
+app.get('/Master', async function (req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');//cors头
   res.send(await Master.find());
 })

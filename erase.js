@@ -4,11 +4,11 @@ const app = express();
 
 // 监听
 const server = app.listen(3000, () => {
-    console.log('App 正在监听3000的端口');
+  console.log('App 正在监听3000的端口');
 });
 
-app.get('/', function(req, res) {
-    res.send('hello');
+app.get('/', function (req, res) {
+  res.send('hello');
 });
 
 // 连接到 MongoDB 数据库
@@ -30,12 +30,12 @@ const Model = mongoose.model('Model', new mongoose.Schema({
 }));
 
 const User = mongoose.model('User', {
-    username: String,
-    password: String
+  username: String,
+  password: String
 });
 
 const Master = mongoose.model('Master', {
-    username: String
+  username: String
 });
 
 // 删除所有文档
@@ -63,12 +63,12 @@ Master.deleteMany({})
     console.error('清空数据库时发生错误:', err);
   });
 
-app.get('/newUser',async function (req, res) {
-    res.send(await User.find());
+app.get('/newUser', async function (req, res) {
+  res.send(await User.find());
 })
 
-app.get('/Model',async function (req, res) {
-    res.send(await Model.find());
+app.get('/Model', async function (req, res) {
+  res.send(await Model.find());
 })
 
 /*
