@@ -1,4 +1,5 @@
 // 创建 Cookie
+
 function createCookie(name, value, days) {
   var expires;
   if (days) {
@@ -49,9 +50,11 @@ document.getElementById("LOGIN").onclick = function () {
                 return master.username === username;
               });
               if (foundMaster) {
+                console.log("go to rank_master1");
                 alert('欢迎你，管理员');
                 createCookie("userName", username, 1); // 创建 Cookie，过期时间为 1 天
                 createCookie("masterCheck", 1, 1); // 创建 Cookie，过期时间为 1 天
+                console.log("go to rank_master");
                 window.location.href = "rank_master.html"; //跳转到管理员排行榜
               }
               else {

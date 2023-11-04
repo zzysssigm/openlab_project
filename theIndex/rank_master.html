@@ -248,12 +248,12 @@
       window.location.href = "index.html"; // 跳转到登陆界面
     }
   </script>
-  
+
   <button class="sidebar-button2" id="SCORE">数据统计</button>
   <script>
-     document.getElementById("SCORE").onclick = function (){
+    document.getElementById("SCORE").onclick = function () {
       window.location.href = "score_distribution.html";
-     }
+    }
   </script>
 
   <script>
@@ -284,8 +284,8 @@
         // 查询名为 "userName" 的 Cookie
         var userNameCookie = getCookie("userName");
         var userMasterCookie = getCookie("masterCheck");
-        if (userNameCookie&&userMasterCookie!=0) {
-          // Cookie 非空，继续执行
+        if (userNameCookie && userMasterCookie != 0) {
+          // Cookie 非空且为管理员，继续执行
 
           // 填充排行榜表格
           const leaderboardTable = document.getElementById('leaderboard');
@@ -347,6 +347,7 @@
         } else {
           // Cookie 为空，不响应
           alert('您没有权限查看管理员排行榜');
+          console.log("go to rank.html");
           window.location.href = "rank.html"; // 跳转到登陆界面
         }
       })

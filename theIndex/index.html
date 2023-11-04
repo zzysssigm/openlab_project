@@ -1,98 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-    body {
-        /* background-color: #4b97a8; */
-        background-image: url("background_1.jpeg");
-        background-size: cover;
-        font-family: Arial, sans-serif;
-    }
-    .box_outer {
-        background-color: antiquewhite;
-        opacity: 0.8;
-        /* filter: blur(1px); */
-        width: 440px;
-        height: 330px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 12px;
-        border-radius: 15px;
-    }
-    .container{
-        margin-bottom: 10px;
-        text-align: center;
-    }
-    .container label{
-        /* filter: blur(0px) !important; */
-        display: flex;
-        margin-bottom: 15px;
-        margin-top: 5px;
-        font-weight: bold;
-        font-size: 25px;
+        body {
+            /* background-color: #4b97a8; */
+            background-image: url("background_1.jpeg");
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
 
-    }
-    .container input{ 
-        width: 95%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-    .container input[type="submit"] {
-        width: 80%;
-        background-color: #4CAF50;
-        color: #fff;
-        cursor: pointer;
-        margin: 0 auto;
-        font-size: 20px;
-        margin-top: 16px;
-    }
-    .container input[type="submit"]:hover {
-        background-color: #39953d;
-        border-color: #477449;
-        border-style: solid;
-        border-width: 2px;
-    }
-    .container button{ 
-        width: 95%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-    .container button[type="button"]{
-        width: 80%;
-        background-color: #4CAF50;
-        color: #fff;
-        cursor: pointer;
-        margin: 0 auto;
-        font-size: 20px;
-        margin-top: 16px;
-    }
-    .container button[type="button"]:hover {
-        background-color: #39953d;
-        border-color: #477449;
-        border-style: solid;
-        border-width: 2px;
-    }
+        .box_outer {
+            background-color: antiquewhite;
+            opacity: 0.8;
+            /* filter: blur(1px); */
+            width: 440px;
+            height: 330px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px;
+            border-radius: 15px;
+        }
+
+        .container {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .container label {
+            /* filter: blur(0px) !important; */
+            display: flex;
+            margin-bottom: 15px;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 25px;
+
+        }
+
+        .container input {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .container input[type="submit"] {
+            width: 80%;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 auto;
+            font-size: 20px;
+            margin-top: 16px;
+        }
+
+        .container input[type="submit"]:hover {
+            background-color: #39953d;
+            border-color: #477449;
+            border-style: solid;
+            border-width: 2px;
+        }
+
+        .container button {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .container button[type="button"] {
+            width: 80%;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 auto;
+            font-size: 20px;
+            margin-top: 16px;
+        }
+
+        .container button[type="button"]:hover {
+            background-color: #39953d;
+            border-color: #477449;
+            border-style: solid;
+            border-width: 2px;
+        }
     </style>
 </head>
+
 <body>
     <div class="box_outer">
         <div class="container">
             <form>
-            <label>UserID</label>
-            <input type="text" id="Username" pattern="[0-9]{10}" required/>
-            <label>Password</label>
-            <input type="password" id="password"/>
-            <button type="button" id="LOGIN">Login</button>
-            <script src="check_user.js"></script>
+                <label>UserID</label>
+                <input type="text" id="Username" pattern="[0-9]{10}" required />
+                <label>Password</label>
+                <input type="password" id="password" />
+                <button type="button" id="LOGIN">Login</button>
+                <script src="check_user.js"></script>
             </form>
             <form action="register.html">
                 <input type="submit" value="Register">
@@ -100,4 +111,5 @@
         </div>
     </div>
 </body>
+
 </html>

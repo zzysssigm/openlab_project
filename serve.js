@@ -57,8 +57,8 @@ app.post('/register', (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const thename = req.body.thename;
-  const username =req.body.username;
-  const password =req.body.password;
+  const username = req.body.username;
+  const password = req.body.password;
 
   // 创建新用户
   const user = new User({ username, password });

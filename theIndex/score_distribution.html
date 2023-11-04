@@ -44,9 +44,9 @@
                         }
                     });
                 });
-                const passRates = passCounts.map(count => count / data.length);
 
-                // 绘制饼状图
+                const passRates = passCounts.map(count => count / data.length);
+                
                 // 绘制饼状图
                 const levelPieChart = echarts.init(document.getElementById('levelPieChart'));
                 levelPieChart.setOption({

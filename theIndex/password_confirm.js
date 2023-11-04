@@ -81,7 +81,7 @@ document.getElementById("SUBMIT").onclick = function () {
             }
           };
           var data = {
-            thename : Thename,
+            thename: Thename,
             username: Username,
             password: Password
           };
@@ -118,12 +118,4 @@ document.getElementById("SUBMIT").onclick = function () {
       xhrMaster.send(jsonData1);
     }
   }
-
-/*
-  //user信息发送到model
-  var xhr = new XMLHttpRequest();
-          var url = 'http://localhost:3000/register';
-          xhr.open('POST', url, true);
-          xhr.setRequestHeader('Content-Type', 'application/json');
-*/
 }
